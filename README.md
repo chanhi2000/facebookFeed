@@ -5,17 +5,17 @@ Mock Project : Facebook
 
 ## Features (Currently)
 
- - Swift 3
- - Fetched Object Mapping: `SafeJsonObject`
-
+ - Swift 5
+ - Fetched Object Mapping: `Decodable`
 
 ## Refactoring Tasks
 
  - [x] ~~Migrate Swift 3 to 5~~
      - [x] ~~Fix Code Accordingly~~
- - [ ] Simplify Code by using latest library
+ - [x] Simplify Code by using latest library
  	 - [x] ~~Initialize CocoaPods~~
-     - [ ] Combine
-     - [ ] Decodable
+     - [x] ~~Combine~~
+     - [x] ~~Decodable~~
+     - [x] ~~SnapKit~~
      - [ ] Probably Others...
 

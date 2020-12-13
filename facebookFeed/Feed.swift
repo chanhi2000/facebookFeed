@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Feed {
+struct Feed : Decodable {
     let feedUrl: String
     let title: String
     let link: String
@@ -16,6 +16,3 @@ struct Feed {
     let type: String
 }
 
-extension Feed: SafeJsonObject {
-    
-}

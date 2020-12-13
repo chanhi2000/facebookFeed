@@ -1,5 +1,5 @@
 //
-//  Location.swift
+//  SingleSection.swift
 //  facebookFeed
 //
 //  Created by LeeChan on 12/13/20.
@@ -8,9 +8,6 @@
 
 import Foundation
 
-struct Location : Decodable {
-    let city: String
-    let state: String
+public enum SingleSection {
+    case main
 }
-
-extension Location: Hashable {}
