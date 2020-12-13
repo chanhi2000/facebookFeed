@@ -1,0 +1,18 @@
+
+{
+    "post": {
+        "name": "Mark Zuckerberg",
+        "location": {
+            "city": "San Francisco",
+            "state": "CA"
+        },
+        "profileImageName": "zuckprofile",
+        "statusText": "By giving people the power to share, we're making the world more transparent.",
+        "statusImageName": "zuckdog",
+        "statusImageUrl": "https://s3-us-west-2.amazonaws.com/letsbuildthatapp/mark_zuckerberg_background.jpg",
+        "numLikes": 150,
+        "numComments": 300,
+        "infoKey": "some other information"
+    }
+}
+
