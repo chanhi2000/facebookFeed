@@ -30,7 +30,6 @@ class Post: SafeJsonObject {
 }
 
 class SafeJsonObject: NSObject {
-    
     override func setValue(_ value: Any?, forKey key: String) {
         let selectorString = "set\(key.uppercased().first!)\(String(key.dropFirst())):"
         let selector = Selector(selectorString)
@@ -38,12 +37,4 @@ class SafeJsonObject: NSObject {
             super.setValue(value, forKey: key)
         }
     }
-}
-class Location: NSObject {
-    var city: String?
-    var state: String?
-}
-
-class Feed: SafeJsonObject {
-    var feedUrl, title, link, author, type: String?
 }
