@@ -13,33 +13,40 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     private var tabBarController: UITabBarController {
         let feedVC = FeedController()
-        let firstNC = UINavigationController(rootViewController: feedVC)
-        firstNC.title = "News Feed"
-        firstNC.tabBarItem.image = UIImage(named: "news_feed_icon")
+        let feedNC = UINavigationController(rootViewController: feedVC)
+        feedNC.title = "News Feed"
+        feedNC.tabBarItem.image = UIImage(named: "news_feed_icon")
         
         let friendRequestVC = FriendRequestsController()
-        let secondNC = UINavigationController(rootViewController: friendRequestVC)
-        secondNC.title = "Request"
-        secondNC.tabBarItem.image = UIImage(named: "requests_icon")
+        let friendRequestNC = UINavigationController(rootViewController: friendRequestVC)
+        friendRequestNC.title = "Request"
+        friendRequestNC.tabBarItem.image = UIImage(named: "requests_icon")
         
         let messengerVC = UIViewController()
-        messengerVC.navigationItem.title = "SOME TITLE"
-        let messengerNC = UINavigationController(rootViewController: UIViewController())
+        messengerVC.navigationItem.title = "Messenger"
+        messengerVC.view.backgroundColor = .systemBackground
+        let messengerNC = UINavigationController(rootViewController: messengerVC)
         messengerNC.title = "Messenger"
         messengerNC.tabBarItem.image = UIImage(named: "messenger_icon")
         
-        let notificationsNC = UINavigationController(rootViewController: UIViewController())
+        let notificationsVC = UIViewController()
+        notificationsVC.navigationItem.title = "Notification"
+        notificationsVC.view.backgroundColor = .systemBackground
+        let notificationsNC = UINavigationController(rootViewController: notificationsVC)
         notificationsNC.title = "Noticfication"
         notificationsNC.tabBarItem.image = UIImage(named: "globe_icon")
         
-        let moreNC = UINavigationController(rootViewController: UIViewController())
+        let moreVC = UIViewController()
+        moreVC.navigationItem.title = "More"
+        moreVC.view.backgroundColor = .systemBackground
+        let moreNC = UINavigationController(rootViewController: moreVC)
         moreNC.title = "More"
         moreNC.tabBarItem.image = UIImage(named: "more_icon")
         
         let tabBarController = UITabBarController()
         tabBarController.viewControllers = [
-            firstNC,
-            secondNC,
+            feedNC,
+            friendRequestNC,
             messengerNC,
             notificationsNC,
             moreNC

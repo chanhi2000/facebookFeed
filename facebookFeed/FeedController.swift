@@ -36,16 +36,17 @@ private extension FeedController {
     }
     
     func configureManager() {
-        collectionViewManager.cellForRow = { collecionView, indexPath, term in
+        collectionViewManager.cellForRow = { collecionView, indexPath, post in
             guard let cell = collecionView.dequeueReusableCell(withReuseIdentifier: FeedCell.reuseIdentifier, for: indexPath) as? FeedCell else { return UICollectionViewCell() }
-            cell.populate(with: term)
+            cell.configure(post)
             cell.feedController = self
+            cell.delegate = self
             return cell
         }
         
         collectionViewManager.selectedItemPublisher.sink  { [weak self] (indexPath) in
-            guard let term = self?.posts[indexPath.item] else { return }
-            print(term)
+            guard let post = self?.posts[indexPath.item] else { return }
+            print(post)
 //            self?.navigateToDetails(for: term)
         }.store(in: &token)
     }
@@ -79,5 +80,12 @@ extension FeedController: UICollectionViewDelegateFlowLayout {
         // to be sensitive to the orientation of the device and adjust the size of collectionView accordingly
         super.viewWillTransition(to: size, with: coordinator)
         ui.reload()
+    }
+}
+
+extension FeedController : FeedCellDelegate {
+    func didTapStatusImageView(for imageView: UIImageView) {
+//        guard let img = imageView.image else { return }
+        ui.animateZoomIn(for: imageView)
     }
 }

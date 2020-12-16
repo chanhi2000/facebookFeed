@@ -8,7 +8,7 @@
 
 import UIKit
 
-private var imageCache = NSCache<AnyObject, AnyObject>()
+let imageCache = NSCache<NSString, UIImage>()
 
 protocol FeedCellDelegate : AnyObject {
     func didTapStatusImageView(for imageView: UIImageView)
@@ -27,23 +27,21 @@ class FeedCell: UICollectionViewCell {
         }
     }
     
-    
-    // MARK: - Views & Variables
-    let nameLabel: UILabel = {
+    private let nameLabel: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.numberOfLines = 2;
         return lbl
     }()
     
-    let profileImageView: UIImageView = {
+    private let profileImageView: UIImageView = {
         let iv = UIImageView()
         iv.translatesAutoresizingMaskIntoConstraints = false
         iv.contentMode = .scaleAspectFit
         return iv
     }()
     
-    let statusTextView: UITextView = {
+    private let statusTextView: UITextView = {
         let tv = UITextView()
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.font = UIFont.boldSystemFont(ofSize: 14)
@@ -61,7 +59,7 @@ class FeedCell: UICollectionViewCell {
         return iv
     }()
     
-    let likesCommentsLabel: UILabel = {
+    private let likesCommentsLabel: UILabel = {
         let lbl = UILabel()
         lbl.translatesAutoresizingMaskIntoConstraints = false
         lbl.font = UIFont.boldSystemFont(ofSize: 12)
@@ -69,19 +67,19 @@ class FeedCell: UICollectionViewCell {
         return lbl
     }()
     
-    let dividerLineView: UIView = {
+    private let dividerLineView: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
         v.backgroundColor = UIColor.rgb(red: 226, green: 228, blue: 232)
         return v
     }()
     
-    let likeButton: UIButton = FeedCell.buttonForTitle(" Like", imageName: "like")
-    let commentButton: UIButton = FeedCell.buttonForTitle(" Comment", imageName: "comment")
-    let shareButton: UIButton = FeedCell.buttonForTitle(" Share", imageName: "share")
+    private let likeButton: UIButton = FeedCell.buttonForTitle(" Like", imageName: "like")
+    private let commentButton: UIButton = FeedCell.buttonForTitle(" Comment", imageName: "comment")
+    private let shareButton: UIButton = FeedCell.buttonForTitle(" Share", imageName: "share")
     
     // MARK: - Actions
-    static func buttonForTitle(_ title: String, imageName: String) -> UIButton {
+    private static func buttonForTitle(_ title: String, imageName: String) -> UIButton {
         let button = UIButton();
         button.setTitle(title, for: UIControl.State())
         button.setTitleColor(UIColor.rgb(red: 151, green: 161, blue: 171), for: UIControl.State())
@@ -101,17 +99,7 @@ class FeedCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    let loader = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.large)
-    
-    func setupStatusImageViewLoader() {
-        statusImageView.addSubview(loader)
-        loader.hidesWhenStopped = true
-        loader.startAnimating()
-        loader.color = UIColor.black
-        loader.snp.makeConstraints { $0.edges.equalTo(statusImageView) }
-//        statusImageView.addConstraintsWithFormat("H:|[v0]|", views: loader)
-//        statusImageView.addConstraintsWithFormat("V:|[v0]|", views: loader)
-    }
+    private let loader = UIActivityIndicatorView(style: UIActivityIndicatorView.Style.large)
 }
 
 private extension FeedCell {
@@ -148,19 +136,29 @@ private extension FeedCell {
         addConstraintsWithFormat("V:[v0(44)]|", views: shareButton)
     }
     
+    func setupStatusImageViewLoader() {
+        statusImageView.addSubview(loader)
+        loader.hidesWhenStopped = true
+        loader.startAnimating()
+        loader.color = UIColor.black
+        loader.snp.makeConstraints { $0.edges.equalTo(statusImageView) }
+    }
+    
     func populateIV(with post: Post) {
         statusImageView.image = nil
         loader.startAnimating()
         
         if let statusImageUrl = post.statusImageUrl {
-            if let image = imageCache.object(forKey: statusImageUrl as AnyObject) as? UIImage {
-                statusImageView.image = image
-                loader.stopAnimating()
+            if let image = imageCache.object(forKey: statusImageUrl as NSString) {
+                DispatchQueue.main.async { [weak self] in
+                    self?.statusImageView.image = image
+                    self?.loader.stopAnimating()
+                }
             } else {
                 NetworkService().getImage(with: statusImageUrl) { [weak self] (result) in
                     switch result {
                     case .success(let img):
-                        imageCache.setObject(img, forKey: statusImageUrl as AnyObject)
+                        imageCache.setObject(img, forKey: statusImageUrl as NSString)
                         self?.statusImageView.image = img
                         self?.loader.stopAnimating()
                     case .failure(let error):   print(error)
@@ -230,9 +228,8 @@ private extension FeedCell {
 }
 
 extension FeedCell {
-    func populate(with post: Post) {
-        populateIV(with: post)
-        populateLbls(with: post)
+    func configure(_ post: Post) {
+        self.post = post
     }
 }
 
